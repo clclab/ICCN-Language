@@ -46,3 +46,38 @@ def combine_output_for_layers(model, inputs, states, word_groups, layers):
                 for token_ids_word in word_groups
         ])
     return sent_tokens_output
+
+def my_correlation_rsa(DM1, DM2, method='spearman'):
+    """Compute representational similarity between two disimilarity matrices
+    """
+    # selection elements of the upper triangle
+    elements1 = DM1[np.triu_indices(DM1.shape[1],k=1)]
+    elements2 = DM2[np.triu_indices(DM2.shape[1],k=1)]
+
+    # compute correlation
+    if method == 'pearson':
+        correlation_of_similarities = stats.pearsonr(elements1, elements2)
+    elif method == 'spearman':
+        correlation_of_similarities = stats.spearmanr(elements1, elements2)
+    else:
+        return NotImplementedError
+
+    return correlation_of_similarities
+
+def RSA_matrix(distance_matrices, method='spearman'):
+    # create the matrix to fill with the results
+    # I initialized it to ones because the correlation with yourself is always 1
+    result_matrix = np.ones((len(distance_matrices), len(distance_matrices)))
+    # instead of taking the combinations of pairs of the matrices themselves,
+    # take combinations of the indices of the list of matrices (range(3) gives [0,1,2])
+    for left_ix, right_ix in combinations(range(len(distance_matrices)), 2):
+        # get the matrix that goes with the index
+        left = distance_matrices[left_ix]
+        right = distance_matrices[right_ix]
+        # do the function
+        correlation, p_value = my_correlation_rsa(left, right, method=method) 
+        # put the result in the matrix
+        result_matrix[left_ix][right_ix] = correlation
+        # (optionally) also in the other triangle
+        result_matrix[right_ix][left_ix] = correlation
+    return result_matrix
