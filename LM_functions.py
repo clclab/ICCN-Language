@@ -12,14 +12,14 @@ def split_to_tokens(encoded_sentence, decoded_sentence):
     token_len = encoded_sentence['attention_mask'].sum().item()
     if transformer in ["gpt2", "gpt2-medium", "gpt2-large"]:
         word_indices = np.array(list(map(lambda e: -1 
-            if e is None else e, encoded.word_ids())))[:token_len]
+            if e is None else e, word_ids)))[:token_len]
         word_groups = np.split(np.arange(word_indices.shape[0]), 
                                np.unique(word_indices, return_index=True)[1])[1:]
         sent_words = ["".join(list(map(lambda t: t[1:] 
             if t[:1] == "Ġ" else t, np.array(decoded_sentence)[g]))) for g in word_groups]
     else:
         word_indices = np.array(list(map(lambda e: -1 
-            if e is None else e, encoded.word_ids())))[1:token_len - 1]
+            if e is None else e, word_ids)))[1:token_len - 1]
         word_groups = np.split(np.arange(word_indices.shape[0]) + 1, 
                                np.unique(word_indices, return_index=True)[1])[1:]
         sent_words = ["".join(list(map(lambda t: t[2:] 
