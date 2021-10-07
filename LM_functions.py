@@ -1,6 +1,8 @@
 import numpy as np
 import torch
 
+transformer = 'distilbert'
+
 def split_to_tokens(encoded_sentence, decoded_sentence):
     """
     Split sentence with separate tokens for punctuation etc.
