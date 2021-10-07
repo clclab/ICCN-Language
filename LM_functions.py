@@ -87,7 +87,7 @@ def RSA_matrix(distance_matrices, method='spearman'):
     return result_matrix
 
 def plot_RSA(result_matrix, model_name, dist_method):
-    layer_labels = ["Embedding","1L","2L","3L","4L","5L","6L"]
+    layer_labels = ["Embedding","1L","2L","3L","4L","5L","6L", "7L"]
     plt.figure(figsize = (10,6))
     ax = sns.heatmap(result_matrix, annot = True, 
                     cmap = 'magma_r',
