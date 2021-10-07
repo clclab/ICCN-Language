@@ -3,7 +3,7 @@ import torch
 from itertools import combinations
 import matplotlib.pyplot as plt
 import seaborn as sns
-import stats
+from scipy import stats
 
 transformer = 'distilbert'
 
