@@ -1,5 +1,8 @@
 import numpy as np
 import torch
+from itertools import combinations
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 transformer = 'distilbert'
 
@@ -81,3 +84,14 @@ def RSA_matrix(distance_matrices, method='spearman'):
         # (optionally) also in the other triangle
         result_matrix[right_ix][left_ix] = correlation
     return result_matrix
+
+def plot_RSA(result_matrix, model_name, dist_method):
+    layer_labels = ["Embedding","1L","2L","3L","4L","5L","6L","7L","8L", "9L", "10L", "11L", "12L"]
+    plt.figure(figsize = (10,6))
+    ax = sns.heatmap(result_matrix, annot = True, 
+                    cmap = 'magma_r',
+                    xticklabels=layer_labels, 
+                    yticklabels=layer_labels )
+    ax.set_title(f'RSA: {model_name} embeddings across layers for 1 sentence ({dist_method} dist.)')
+    plt.show()
+    plt.close()
